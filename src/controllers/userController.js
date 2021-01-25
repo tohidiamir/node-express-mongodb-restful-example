@@ -6,11 +6,18 @@ import Base from './baseController'
 export default class UserController extends Base {
     model = User
 
+    getDoctor = (req, res, next) => {
+        User.find({ role: 'doctor' })
+            .select('email _id name')
+            .lean()
+            .exec(function(err, users) {
+                return res.end(JSON.stringify(users))
+            })
+    }
+
     signin = (req, res, next) => {
         return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
             if (err) {
-                console.log('Erro')
-                console.log(err)
                 return next(err)
             }
 

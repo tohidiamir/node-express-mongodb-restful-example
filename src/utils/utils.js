@@ -16,8 +16,9 @@ export const getTokenFromHeaders = req => {
     } = req
     let token = authorization
 
-    if (authorization && authorization.split(' ')[0] === 'Token') token = authorization.split(' ')[1]
+    if (authorization && authorization.split(' ')[0] === 'Bearer') token = authorization.split(' ')[1]
 
+    console.log(token)
     return token
 }
 
@@ -25,6 +26,7 @@ export const authRequired = jwt({
     secret: config.SECRET_TOKEN,
     userProperty: 'payload',
     getToken: getTokenFromHeaders,
+    algorithms: ['RS256'],
 })
 
 export const useIdentifyUser = jwt({
@@ -32,6 +34,7 @@ export const useIdentifyUser = jwt({
     userProperty: 'payload',
     getToken: getTokenFromHeaders,
     credentialsRequired: false,
+    algorithms: ['RS256'],
 })
 
 export const useAuthErrorHandling = (err, req, res, next) => {
